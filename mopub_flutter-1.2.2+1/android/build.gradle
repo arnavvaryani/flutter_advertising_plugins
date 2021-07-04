@@ -1,0 +1,61 @@
+group 'com.mopub_flutter'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
+        maven { url 'https://maven.google.com' } 
+        maven { url 'https://tapjoy.bintray.com/maven' }
+        maven { url 'https://adcolony.bintray.com/AdColony' }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 19
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    
+   implementation('com.mopub:mopub-sdk:+@aar') {
+        transitive = true
+    }
+
+implementation 'com.adcolony:sdk:4.2.2'
+implementation 'com.mopub.mediation:adcolony:4.2.2.0'
+implementation 'com.tapjoy:tapjoy-android-sdk:12.4.0@aar'
+implementation 'com.mopub.mediation:tapjoy:12.4.0.0'
+implementation 'com.tapjoy:tapjoy-android-sdk:12.6.1@aar'
+implementation 'com.mopub.mediation:tapjoy:12.6.1.0'
+implementation 'com.google.android.gms:play-services-ads:19.3.0'
+implementation 'com.mopub.mediation:admob:19.3.0.2'
+
+}
+
