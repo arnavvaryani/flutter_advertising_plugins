@@ -13,9 +13,9 @@ import io.flutter.plugin.common.PluginRegistry;
 
 class MopubInterstitialAdPlugin implements MethodChannel.MethodCallHandler {
 
-    private HashMap<String, MoPubInterstitial> ads = new HashMap<>();
+    private final HashMap<String, MoPubInterstitial> ads = new HashMap<>();
 
-    private PluginRegistry.Registrar registrar;
+    private final PluginRegistry.Registrar registrar;
 
     MopubInterstitialAdPlugin(PluginRegistry.Registrar registrar) {
         this.registrar = registrar;
@@ -43,6 +43,7 @@ class MopubInterstitialAdPlugin implements MethodChannel.MethodCallHandler {
                 if (registrar.activity().isFinishing() || registrar.activity().isDestroyed())
                     return;
                 if (ads.get(adUnitId) == null) {
+                    assert adUnitId != null;
                     ads.put(adUnitId, new MoPubInterstitial(registrar.activity(), adUnitId));
                 }
                 ad = ads.get(adUnitId);

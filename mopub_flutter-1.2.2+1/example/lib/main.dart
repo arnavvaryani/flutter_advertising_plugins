@@ -13,8 +13,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MoPubInterstitialAd interstitialAd;
-  MoPubRewardedVideoAd videoAd;
+  late MoPubInterstitialAd interstitialAd;
+  late MoPubRewardedVideoAd videoAd;
 
   @override
   void initState() {
@@ -28,8 +28,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadRewardedAd() {
-    videoAd = MoPubRewardedVideoAd('ad_unit_id',
-        (result, args) {
+    videoAd = MoPubRewardedVideoAd('ad_unit_id', (result, args) {
       setState(() {
         rewardedResult = '${result.toString()}____$args';
       });
@@ -42,12 +41,12 @@ class _MyAppState extends State<MyApp> {
 
   void _loadInterstitialAd() {
     interstitialAd = MoPubInterstitialAd(
-      'ad_unit_id',
+      '24534e1901884e398f1253216226017e',
       (result, args) {
         print('Interstitial $result');
       },
       reloadOnClosed: true,
-    );    
+    );
   }
 
   @override
@@ -71,13 +70,13 @@ class _MyAppState extends State<MyApp> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () async {
                     await interstitialAd.load();
                   },
                   child: Text('Load interstitial'),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () async {
                     interstitialAd.show();
                   },
@@ -95,7 +94,7 @@ class _MyAppState extends State<MyApp> {
                   },
                   child: Text('Load Video'),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () async {
                     var result = await videoAd.isReady();
                     print('Is Ready $result');

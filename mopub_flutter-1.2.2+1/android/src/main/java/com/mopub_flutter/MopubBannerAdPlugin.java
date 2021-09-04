@@ -30,8 +30,8 @@ class MopubBannerAdPlugin extends PlatformViewFactory {
 }
 
 class MopubBannerAdView implements MoPubView.BannerAdListener, PlatformView {
-    private MoPubView adView;
-    private MethodChannel channel;
+    private final MoPubView adView;
+    private final MethodChannel channel;
 
 
     MopubBannerAdView(Context context, int id, HashMap args, BinaryMessenger messenger) {
@@ -41,6 +41,7 @@ class MopubBannerAdView implements MoPubView.BannerAdListener, PlatformView {
         final int height = (int) args.get("height");
 
         adView = new MoPubView(context);
+        assert adUnitId != null;
         adView.setAdUnitId(adUnitId);
         adView.setAutorefreshEnabled(autoRefresh);
         adView.setAdSize(getBannerAdSize(height));

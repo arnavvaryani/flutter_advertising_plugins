@@ -55,11 +55,11 @@ class _MainHomeState extends State<MainHome> {
       );
     } else if (event == FlutterMintegralListener.onInteractivelLoadSuccess) {
       isInteractiveReady = true;
-    } else if (event == FlutterMintegralListener.onInterstitialVideoLoadSuccess) {
+    } else if (event ==
+        FlutterMintegralListener.onInterstitialVideoLoadSuccess) {
       isInterReady = true;
       print('isInterReady :$isInterReady');
-     } 
-     else if (event == FlutterMintegralListener.onRewardLoadSuccess) {
+    } else if (event == FlutterMintegralListener.onRewardLoadSuccess) {
       isRewardReady = true;
     }
   }
@@ -91,7 +91,7 @@ class _MainHomeState extends State<MainHome> {
             ),
             ElevatedButton(
                 child: Text("Interactive"),
-                onPressed: () { 
+                onPressed: () {
                   if (isInteractiveReady) {
                     Mintegral.showInteractiveAD();
                   }

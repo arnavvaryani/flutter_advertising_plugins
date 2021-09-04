@@ -62,8 +62,8 @@ class AyeTStudios {
         print("initializationFailed");
         break;
       case "deductUserBalance":
-_deductUserBalance(call.arguments);
-break;
+        _deductUserBalance(call.arguments);
+        break;
       default:
         print('Unknown method ${call.method} ');
     }
@@ -81,5 +81,6 @@ break;
   void setInitilizationFailedListener(
           InitializationFailed initializationFailed) =>
       _initializationFailed = initializationFailed;
-  void setDeductUserBalanceListener(DeductUserBalance deductUserBalance) => _deductUserBalance = deductUserBalance;
+  void setDeductUserBalanceListener(DeductUserBalance deductUserBalance) =>
+      _deductUserBalance = deductUserBalance;
 }

@@ -24,7 +24,7 @@ import static com.mopub.common.logging.MoPubLog.SdkLogEvent.CUSTOM;
  */
 public class MopubFlutterPlugin implements MethodCallHandler {
 
-    private Activity activity;
+    private final Activity activity;
 
     private MopubFlutterPlugin(Activity activity) {
         this.activity = activity;
@@ -61,6 +61,7 @@ public class MopubFlutterPlugin implements MethodCallHandler {
         final boolean testMode = (boolean) initValues.get("testMode");
         final String adUnitId = (String) initValues.get("adUnitId");
 
+        assert adUnitId != null;
         final SdkConfiguration.Builder configBuilder = new SdkConfiguration.Builder(adUnitId)
                 .withLogLevel(testMode ? MoPubLog.LogLevel.DEBUG : MoPubLog.LogLevel.NONE);
 

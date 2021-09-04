@@ -4,20 +4,20 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.4'
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
-        maven { url 'https://maven.google.com' } 
+        maven { url 'https://maven.google.com' }
         maven { url 'https://tapjoy.bintray.com/maven' }
         maven { url 'https://adcolony.bintray.com/AdColony' }
     }
@@ -26,7 +26,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 19
@@ -43,8 +43,7 @@ android {
 }
 
 dependencies {
-    
-   implementation('com.mopub:mopub-sdk:+@aar') {
+    implementation('com.mopub:mopub-sdk:5.18.0@aar') {
         transitive = true
     }
 
