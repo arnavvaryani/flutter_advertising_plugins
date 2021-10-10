@@ -15,8 +15,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     FlutterInBrain.instance.init(
         apiClientId: 'your_api_token',
-        apiSecret:
-            'your_api_secret',
+        apiSecret: 'your_api_secret',
         isS2S: false,
         userId: 'user_id');
     FlutterInBrain.instance.setDidReceiveRewardListener((int reward) {
@@ -40,11 +39,11 @@ class _MyAppState extends State<MyApp> {
     FlutterInBrain.instance.setSurveyWallClosedFromPageListener(() {
       print('Inbrain: surveywall closed callback');
     });
-    FlutterInBrain.instance.setDidRecieveiOSSurveywallListener((reward) { 
-        print('callback message:$reward');
+    FlutterInBrain.instance.setDidRecieveiOSSurveywallListener((reward) {
+      print('callback message:$reward');
       print('Inbrain: did recieve ios reward callback');
     });
-    FlutterInBrain.instance.setIsSurveyWalliOSSuccessListener((available) { 
+    FlutterInBrain.instance.setIsSurveyWalliOSSuccessListener((available) {
       print('Inbrain: surveywall ios success callback');
     });
     super.initState();

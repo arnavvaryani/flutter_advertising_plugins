@@ -32,8 +32,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initializationFailed(int failed) {
-    print(
-        'AyetSdk", "initializationFailed $failed');
+    print('AyetSdk", "initializationFailed $failed');
   }
 
   void userAvailableBalance(int balance) {

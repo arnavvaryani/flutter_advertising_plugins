@@ -45,8 +45,8 @@ class FlutterInBrain {
   }
 
   Future<void> destroyCallback() async {
-    if(Platform.isAndroid) {
-    return _channel.invokeMethod('destroyCallback');
+    if (Platform.isAndroid) {
+      return _channel.invokeMethod('destroyCallback');
     }
   }
 
@@ -54,13 +54,13 @@ class FlutterInBrain {
     return _channel.invokeMethod('showSurveys');
   }
 
-  Future<void> customiseUI(
-      {String title,
-      bool elevation,
-      String bgColor,
-      String buttonColor,
-      String titleColor,
-}) async {
+  Future<void> customiseUI({
+    String title,
+    bool elevation,
+    String bgColor,
+    String buttonColor,
+    String titleColor,
+  }) async {
     return _channel.invokeMethod('customiseUI', <String, dynamic>{
       'title': title,
       'elevation': elevation,
@@ -81,28 +81,28 @@ class FlutterInBrain {
         _surveyClosedFromPageListener();
         break;
       case "didRecieveInBrainRewards":
-      if(Platform.isAndroid) {
-        _didReceiveInbrainRewardListener(call.arguments);
-      } else if(Platform.isIOS) {
-        _didReceiveInbrainIosRewardListener(call.arguments);
-      }
+        if (Platform.isAndroid) {
+          _didReceiveInbrainRewardListener(call.arguments);
+        } else if (Platform.isIOS) {
+          _didReceiveInbrainIosRewardListener(call.arguments);
+        }
         break;
       case "onShowSuccess":
-      if(Platform.isAndroid) {
-        _surveyShowSuccessListener();
-      }
+        if (Platform.isAndroid) {
+          _surveyShowSuccessListener();
+        }
         break;
       case "onShowFailure":
-      if(Platform.isAndroid) {
-        _surveyShowFailureListener(call.arguments);
-      }
+        if (Platform.isAndroid) {
+          _surveyShowFailureListener(call.arguments);
+        }
         break;
       case "onSurveysAvailable":
-      if(Platform.isAndroid) {
-        _isSurveyWallAvailableListener(call.arguments);
-      } else if(Platform.isIOS) {
-        _isSurveyWallIosAvailableListener(call.arguments);
-      }
+        if (Platform.isAndroid) {
+          _isSurveyWallAvailableListener(call.arguments);
+        } else if (Platform.isIOS) {
+          _isSurveyWallIosAvailableListener(call.arguments);
+        }
         break;
       default:
         print('Unknown method ${call.method}');
@@ -132,12 +132,12 @@ class FlutterInBrain {
           SurveyShowSuccessListener surveyShowSuccessListener) =>
       _surveyShowSuccessListener = surveyShowSuccessListener;
 
-   void setIsSurveyWalliOSSuccessListener(
+  void setIsSurveyWalliOSSuccessListener(
           IsSurveyWallIosAvailableListener surveyShowSuccessListener) =>
       _isSurveyWallIosAvailableListener = surveyShowSuccessListener;
-    
-     void setDidRecieveiOSSurveywallListener(
-          DidReceiveInbrainIosRewardListener didReceiveInbrainIosRewardListener) =>
-      _didReceiveInbrainIosRewardListener = didReceiveInbrainIosRewardListener;
 
+  void setDidRecieveiOSSurveywallListener(
+          DidReceiveInbrainIosRewardListener
+              didReceiveInbrainIosRewardListener) =>
+      _didReceiveInbrainIosRewardListener = didReceiveInbrainIosRewardListener;
 }

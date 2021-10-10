@@ -14,8 +14,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    TheoremReach.instance
-        .init(apiToken: 'api_token', userId: 'user_id');
+    TheoremReach.instance.init(apiToken: 'api_token', userId: 'user_id');
     TheoremReach.instance.setOnRewardListener(onTheoremReachReward);
     TheoremReach.instance
         .setRewardCenterClosed(onTheoremReachRewardCenterClosed);
