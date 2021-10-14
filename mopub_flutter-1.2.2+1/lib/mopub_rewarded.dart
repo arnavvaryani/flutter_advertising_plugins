@@ -25,7 +25,7 @@ enum RewardedVideoAdResult {
 class MoPubRewardedVideoAd {
   static const MethodChannel _channel = MethodChannel(REWARDED_VIDEO_CHANNEL);
 
-  MethodChannel _adChannel;
+  late MethodChannel _adChannel;
   final void Function(RewardedVideoAdResult, dynamic) listener;
 
   final String adUnitId;
@@ -50,7 +50,7 @@ class MoPubRewardedVideoAd {
     }
   }
 
-  Future<bool> isReady() async {
+  Future<bool?> isReady() async {
     try {
       var result = await _channel
           .invokeMethod(HAS_REWARDED_VIDEO_METHOD, <String, dynamic>{

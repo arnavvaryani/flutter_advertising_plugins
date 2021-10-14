@@ -23,7 +23,7 @@ class MoPubInterstitialAd {
   //Common channel for all interstitial ads until load
   static const MethodChannel _channel = MethodChannel(INTERSTITIAL_AD_CHANNEL);
 
-  MethodChannel _adChannel;
+  late MethodChannel _adChannel;
   final void Function(InterstitialAdResult, dynamic) listener;
 
   final String adUnitId;
@@ -48,7 +48,7 @@ class MoPubInterstitialAd {
     }
   }
 
-  Future<bool> isReady() async {
+  Future<bool?> isReady() async {
     try {
       var result = await _channel
           .invokeMethod(HAS_INTERSTITIAL_METHOD, <String, dynamic>{

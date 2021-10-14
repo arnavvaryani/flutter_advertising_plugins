@@ -31,19 +31,19 @@ enum BannerAdResult {
 }
 
 class MoPubBannerAd extends StatefulWidget {
-  final String adUnitId;
+  final String? adUnitId;
 
   /// Size of the Banner Ad. Choose from three pre-defined sizes.
   final BannerSize bannerSize;
 
   /// Banner Ad listener
-  final void Function(BannerAdResult, dynamic) listener;
+  final void Function(BannerAdResult, dynamic)? listener;
 
   /// This defines if the ad view to be kept alive.
   final bool keepAlive;
 
   const MoPubBannerAd({
-    Key key,
+    Key? key,
     this.adUnitId,
     this.bannerSize = BannerSize.MATCH_VIEW,
     this.listener,
@@ -102,7 +102,7 @@ class _MoPubBannerAdState extends State<MoPubBannerAd>
       switch (call.method) {
         case ERROR_METHOD:
           if (widget.listener != null)
-            widget.listener(BannerAdResult.ERROR, call.arguments);
+            widget.listener!(BannerAdResult.ERROR, call.arguments);
           break;
         case LOADED_METHOD:
           setState(() {
@@ -111,11 +111,11 @@ class _MoPubBannerAdState extends State<MoPubBannerAd>
                 : widget.bannerSize.height.toDouble();
           });
           if (widget.listener != null)
-            widget.listener(BannerAdResult.LOADED, call.arguments);
+            widget.listener!(BannerAdResult.LOADED, call.arguments);
           break;
         case CLICKED_METHOD:
           if (widget.listener != null)
-            widget.listener(BannerAdResult.CLICKED, call.arguments);
+            widget.listener!(BannerAdResult.CLICKED, call.arguments);
           break;
       }
     });
