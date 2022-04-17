@@ -7,12 +7,12 @@ FlutterViewController* flutterViewController;
     NSDictionary *placements;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
+  tapJoyChannel = [FlutterMethodChannel
       methodChannelWithName:@"flutter_tapjoy"
             binaryMessenger:[registrar messenger]];
     FlutterTapjoyPlugin* instance = [[FlutterTapjoyPlugin alloc] init];
     
-  [registrar addMethodCallDelegate:instance channel:channel];
+  [registrar addMethodCallDelegate:instance channel:tapJoyChannel];
     
   flutterViewController =
     [[FlutterViewController alloc] initWithProject:nil
