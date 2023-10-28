@@ -1,0 +1,38 @@
+group 'com.anavrinapps.trsurveys'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+       dependencies {
+        implementation 'com.google.android.gms:play-services-ads:19.4.0'
+        implementation 'com.theoremreach:theoremreach:3.4.6'
+        implementation 'androidx.appcompat:appcompat:1.2.0'
+    }
+}
