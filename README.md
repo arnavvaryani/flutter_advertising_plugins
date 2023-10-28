@@ -1,6 +1,6 @@
 # Flutter Plugins
 
-This repo contains the source code for Flutter plugins developed for various ad-networks developed by Anavrin Apps LLP.
+This repo contains the source code for Flutter plugins developed for various ad-networks developed by Arnav Varyani.
 
 
 Flutter plugins enable access to platform-specific APIs using a platform channel. 
