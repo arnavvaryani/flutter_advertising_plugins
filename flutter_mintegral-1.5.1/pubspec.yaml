@@ -1,0 +1,28 @@
+name: flutter_mintegral
+description: Mintegral SDK for Android
+version: 1.5.1
+homepage: https://github.com/AnavrinApps/flutter_plugins
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.anavrinapps.flutter_mintegral
+        pluginClass: FlutterMintegralPlugin
+      ios:
+        pluginClass: FlutterMintegralPlugin
+
+ 
