@@ -1,0 +1,29 @@
+PODS:
+  - AdColony (4.9.0)
+  - adcolony_flutter (1.8.0):
+    - AdColony
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - adcolony_flutter (from `.symlinks/plugins/adcolony_flutter/ios`)
+  - Flutter (from `Flutter`)
+
+SPEC REPOS:
+  trunk:
+    - AdColony
+
+EXTERNAL SOURCES:
+  adcolony_flutter:
+    :path: ".symlinks/plugins/adcolony_flutter/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  AdColony: 4f3738dc633d7aaa8ec60729df973076cc8e97ed
+  adcolony_flutter: 51a65a82514c914c2ac19cd5f2a554ab083e12f5
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+
+PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+
+COCOAPODS: 1.12.1
