@@ -1,0 +1,50 @@
+group 'com.anavrinapps.flutter_mdata'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.1'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+         maven {
+        url 'https://maven.ogury.co'
+        }
+        maven {
+        url 'https://maven.monedata.io/artifactory/public'
+        credentials {
+            username 'publishers'
+            password 'npg2EgmmbwbNMte8'
+        }
+    }
+    }
+}
+
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        multiDexEnabled true
+        minSdkVersion 16
+    }
+    compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+    }
+    dependencies {
+    implementation 'io.monedata:android-sdk:1.+'
+    implementation 'co.ogury:ogury-sdk:5.+'
+    }
+}
