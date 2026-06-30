@@ -2,10 +2,7 @@
 
 A Flutter plugin for the **Mintegral (Mobvista)** ad SDK — direct integration
 (not via AdMob mediation). Supports **rewarded video, interstitial, banner, and
-splash** ad formats.
-
-> **Android only for now.** A native iOS implementation (via Swift Package
-> Manager) is planned for a follow-up release; the iOS side is currently a stub.
+splash** ad formats on **Android and iOS**.
 
 ## Getting started
 
@@ -34,6 +31,19 @@ await Mintegral.instance.initialize(
 ```
 
 See `example/` for rewarded, interstitial, banner, and splash usage.
+
+### iOS setup
+
+Requires iOS 12.0+. The plugin integrates via **Swift Package Manager** (the
+Mintegral SDK is distributed as a Swift package). Enable SPM in your app:
+
+```sh
+flutter config --enable-swift-package-manager
+```
+
+The plugin's `Package.swift` declares the required `-ObjC` linker flag. For App
+Store submission you must also configure SKAdNetwork IDs and an
+`NSUserTrackingUsageDescription` (ATT) per Mintegral's iOS integration guide.
 
 ## Issues & Pull Requests
 

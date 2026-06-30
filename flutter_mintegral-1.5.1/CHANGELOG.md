@@ -41,5 +41,10 @@ Modernization (Android):
 - Dart 3 / Flutter 3.3+; flutter_lints ^3.
 - Removed a stray nested `flutter_mintegral/` plugin skeleton.
 
-Note: iOS is still a stub (`getPlatformVersion`). A real iOS implementation via
-Swift Package Manager is planned for a follow-up release.
+iOS (new):
+- Implemented the iOS side (previously a `getPlatformVersion` stub) against the
+  Mintegral iOS SDK 8.1.5 via **Swift Package Manager** (`MintegralAdSDK`).
+- Parity for rewarded video, interstitial, splash, and banner — same method
+  channel, custom codec (types 128/129/130), and event names as Android.
+- Requires the `-ObjC` linker flag (declared in the plugin's Package.swift) and
+  Flutter 3.24+.
