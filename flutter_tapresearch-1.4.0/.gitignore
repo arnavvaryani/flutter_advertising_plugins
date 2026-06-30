@@ -1,0 +1,22 @@
+# Dart/Flutter
+.dart_tool/
+.packages
+build/
+pubspec.lock
+*.iml
+
+# Android
+android/.gradle/
+android/local.properties
+
+# iOS / Swift Package Manager
+ios/**/.build/
+ios/**/Package.resolved
+ios/Flutter/ephemeral/
+example/ios/Flutter/ephemeral/
+example/ios/Pods/
+example/.flutter-plugins
+example/.flutter-plugins-dependencies
+
+# Generated
+**/GeneratedPluginRegistrant.*

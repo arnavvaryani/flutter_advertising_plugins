@@ -3,59 +3,83 @@ import 'package:flutter_tapresearch/flutter_tapresearch.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
+// Replace with your real values from the TapResearch dashboard.
+const String _apiToken = 'YOUR_API_TOKEN';
+const String _userIdentifier = 'user-123';
+const String _placementTag = 'YOUR_PLACEMENT_TAG';
+
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  final TapResearch _tapResearch = TapResearch.instance;
+  String _status = 'Initializing…';
+  bool _contentAvailable = false;
+
   @override
   void initState() {
-    TapResearch.instance.configure(apiToken: 'api_token');
-    TapResearch.instance.setUniqueUserIdentifier('uid');
-    TapResearch.instance.initPlacement(placementId: 'placement_id');
-    TapResearch.instance.setDebugMode(true);
-    TapResearch.instance.setRewardListener();
-    TapResearch.instance.setDidReceiveRewardListener(onTapResearchReward);
-    TapResearch.instance
-        .setIsSurveyWallAvailableListener(onTapResearchSurveyAvailable);
-    TapResearch.instance.setSurveyWallOpenedListener(onTapResearchOpened);
-    TapResearch.instance.setSurveyWallDismissedListener(onTapResearchDismissed);
     super.initState();
+    _setUpTapResearch();
   }
 
-  void onTapResearchReward(int quantity) {
-    print('TR: $quantity');
+  Future<void> _setUpTapResearch() async {
+    // Register listeners BEFORE initialize so early callbacks aren't missed.
+    _tapResearch
+      ..setSdkReadyListener(_onSdkReady)
+      ..setRewardsListener(_onRewards)
+      ..setErrorListener((error) => setState(() => _status = 'Error: $error'))
+      ..setContentShownListener((tag) => debugPrint('TR: content shown ($tag)'))
+      ..setContentDismissedListener(
+          (tag) => debugPrint('TR: content dismissed ($tag)'));
+
+    await _tapResearch.initialize(
+      apiToken: _apiToken,
+      userIdentifier: _userIdentifier,
+    );
   }
 
-  void onTapResearchSurveyAvailable(int survey) {
-    print('TR: $survey');
+  Future<void> _onSdkReady() async {
+    final available =
+        await _tapResearch.canShowContentForPlacement(_placementTag);
+    setState(() {
+      _contentAvailable = available;
+      _status = available ? 'Content available' : 'No content available';
+    });
   }
 
-  void onTapResearchDismissed() {
-    print('TR: closed');
-  }
-
-  void onTapResearchOpened() {
-    print('TR: opened');
+  void _onRewards(List<TRReward> rewards) {
+    final total = rewards.fold<int>(0, (sum, r) => sum + r.rewardAmount);
+    debugPrint('TR: received ${rewards.length} reward(s), total $total');
+    setState(() => _status = 'Received $total reward(s)');
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('TapResearch example app'),
-        ),
+        appBar: AppBar(title: const Text('TapResearch example app')),
         body: Center(
-            child: ElevatedButton(
-                child: Text("Launch TapResearch"),
-                onPressed: () {
-                  TapResearch.instance.showSurveyWall();
-                })),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_status),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _contentAvailable
+                    ? () => _tapResearch.showContentForPlacement(_placementTag)
+                    : null,
+                child: const Text('Show TapResearch content'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

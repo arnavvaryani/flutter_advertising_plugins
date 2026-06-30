@@ -1,11 +1,12 @@
 name: flutter_tapresearch
-description: TapResearch Surveys for Android & iOS 
-version: 1.4.0
-homepage: https://github.com/AnavrinApps/flutter_plugins
+description: TapResearch content & surveys (SDK 3.x) for Android & iOS.
+version: 2.0.0
+homepage: https://github.com/arnavvaryani/flutter_advertising_plugins
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=1.20.0"
+  sdk: '>=3.5.0 <4.0.0'
+  # Swift Package Manager support for iOS plugins requires Flutter 3.24+.
+  flutter: '>=3.24.0'
 
 dependencies:
   flutter:
@@ -14,6 +15,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^3.0.0
 
 flutter:
   plugin:
