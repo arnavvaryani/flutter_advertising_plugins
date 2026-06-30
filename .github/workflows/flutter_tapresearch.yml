@@ -25,6 +25,9 @@ jobs:
         with:
           channel: stable
           flutter-version: '3.24.x'
+      # The plugin is SPM-only (no podspec); enabling SPM lets pub get resolve
+      # the example's iOS target.
+      - run: flutter config --enable-swift-package-manager
       - run: flutter pub get
       - run: flutter analyze lib test
       - run: flutter test
@@ -45,6 +48,7 @@ jobs:
         with:
           channel: stable
           flutter-version: '3.24.x'
+      - run: flutter config --enable-swift-package-manager
       - run: flutter pub get
       - run: flutter build apk --debug
         working-directory: flutter_tapresearch-1.4.0/example
