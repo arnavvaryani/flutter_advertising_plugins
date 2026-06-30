@@ -1,5 +1,5 @@
 group 'com.anavrinapps.flutter_mintegral'
-version '1.0'
+version '2.0.0'
 
 buildscript {
     repositories {
@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:8.1.0'
     }
 }
 
@@ -30,7 +30,8 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 33
+    namespace 'com.anavrinapps.flutter_mintegral'
+    compileSdkVersion 35
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -38,23 +39,24 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 19
+        // Mintegral SDK 16.x requires minSdk 23.
+        minSdkVersion 23
         consumerProguardFiles 'proguard-rules.pro'
     }
 }
 
 dependencies {
 
-    implementation "androidx.appcompat:appcompat:1.5.0"
-    // 集成海外SDK务必项目中引入RecyclerView
-    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    // RecyclerView is required by the Mintegral overseas SDK.
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
 
-    // Mintegral SDK
-implementation 'com.mbridge.msdk.oversea:reward:16.4.31'
-//If you need to use auction ads, please add this dependency statement.(mbbid)
-implementation 'com.mbridge.msdk.oversea:mbbid:16.4.31'
-implementation 'com.mbridge.msdk.oversea:mbsplash:16.4.31'
-implementation 'com.mbridge.msdk.oversea:mbbanner:16.4.31'
-implementation 'com.mbridge.msdk.oversea:newinterstitial:16.4.31'
+    // Mintegral SDK (overseas). Per-format artifacts off the umbrella 16.9.x line.
+    implementation 'com.mbridge.msdk.oversea:reward:16.9.91'
+    // mbbid is required for bidding/auction ads.
+    implementation 'com.mbridge.msdk.oversea:mbbid:16.9.91'
+    implementation 'com.mbridge.msdk.oversea:mbsplash:16.9.91'
+    implementation 'com.mbridge.msdk.oversea:mbbanner:16.9.91'
+    implementation 'com.mbridge.msdk.oversea:newinterstitial:16.9.91'
 
 }

@@ -32,3 +32,14 @@ New ad formats in Android, dependency update
 Dependency update
 ## 1.5.1
 Plugin update
+## 2.0.0
+Modernization (Android):
+- Mintegral overseas SDK 16.4.31 → 16.9.91 (reward, mbbid, mbsplash, mbbanner, newinterstitial).
+- AGP 7.2.2 → 8.1.0 with `namespace`; removed the manifest `package` attribute.
+- minSdk 19 → 23 (required by SDK 16.x); compileSdk 33 → 35.
+- Bumped androidx.appcompat / recyclerview.
+- Dart 3 / Flutter 3.3+; flutter_lints ^3.
+- Removed a stray nested `flutter_mintegral/` plugin skeleton.
+
+Note: iOS is still a stub (`getPlatformVersion`). A real iOS implementation via
+Swift Package Manager is planned for a follow-up release.

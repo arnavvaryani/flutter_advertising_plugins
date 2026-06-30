@@ -70,20 +70,13 @@ class BannerAdListener extends AdWithViewListener {
   /// )
   /// ```
   const BannerAdListener({
-    AdEventCallback? onAdLoaded,
-    AdErrorCallback? onAdFailedToLoad,
-    AdEventCallback? onAdImpression,
-    AdEventCallback? onAdClicked,
-    AdEventCallback? onAdClosed,
-    AdEventCallback? onAdLeftApplication,
-  }) : super(
-    onAdLoaded: onAdLoaded,
-    onAdFailedToLoad: onAdFailedToLoad,
-    onAdImpression: onAdImpression,
-    onAdClicked: onAdClicked,
-    onAdClosed: onAdClosed,
-    onAdLeftApplication: onAdLeftApplication,
-  );
+    super.onAdLoaded,
+    super.onAdFailedToLoad,
+    super.onAdImpression,
+    super.onAdClicked,
+    super.onAdClosed,
+    super.onAdLeftApplication,
+  });
 }
 
 /// Callback events for for splash ads.
@@ -165,25 +158,25 @@ abstract class FullScreenAdLoadCallback<T> {
 class RewardedAdLoadCallback extends FullScreenAdLoadCallback<RewardVideoAd> {
   /// Construct a [RewardedAdLoadCallback].
   const RewardedAdLoadCallback({
-    required GenericAdEventCallback<RewardVideoAd> onAdLoaded,
-    required FullScreenAdLoadErrorCallback onAdFailedToLoad,
-  }) : super(onAdLoaded: onAdLoaded, onAdFailedToLoad: onAdFailedToLoad);
+    required super.onAdLoaded,
+    required super.onAdFailedToLoad,
+  });
 }
 
 /// This class holds callbacks for loading a [InterstitialAd].
 class InterstitialAdLoadCallback extends FullScreenAdLoadCallback<InterstitialAd> {
   /// Construct a [InterstitialAdLoadCallback].
   const InterstitialAdLoadCallback({
-    required GenericAdEventCallback<InterstitialAd> onAdLoaded,
-    required FullScreenAdLoadErrorCallback onAdFailedToLoad,
-  }) : super(onAdLoaded: onAdLoaded, onAdFailedToLoad: onAdFailedToLoad);
+    required super.onAdLoaded,
+    required super.onAdFailedToLoad,
+  });
 }
 
 /// This class holds callbacks for loading an [SplashAd].
 class SplashAdLoadCallback extends FullScreenAdLoadCallback<SplashAd> {
   /// Construct an [SplashAdLoadCallback].
   const SplashAdLoadCallback({
-    required GenericAdEventCallback<SplashAd> onAdLoaded,
-    required FullScreenAdLoadErrorCallback onAdFailedToLoad,
-  }) : super(onAdLoaded: onAdLoaded, onAdFailedToLoad: onAdFailedToLoad);
+    required super.onAdLoaded,
+    required super.onAdFailedToLoad,
+  });
 }
