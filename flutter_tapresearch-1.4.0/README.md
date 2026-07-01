@@ -72,7 +72,17 @@ if (await tr.canShowContentForPlacement('my_placement')) {
 
 See [`example/lib/main.dart`](example/lib/main.dart) for a complete app.
 
-## API
+## Bundled SDK versions
+
+| Platform | Dependency | Version |
+|---|---|---|
+| Android | `com.tapresearch:tapsdk` | `3.7.2` |
+| Android | Android Gradle Plugin | `8.1.0` |
+| iOS | `TapResearchSDK` (Swift Package) | `3.8.0--beta03` |
+
+> Requirements: Android `minSdk 23` / `compileSdk 35`, iOS `12.0+`, Flutter `3.24+`.
+> The iOS package currently exposes only a beta SPM tag; bump to a stable tag
+> once one is published.
 
 | Method | Description |
 |---|---|
