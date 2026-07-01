@@ -68,6 +68,8 @@ jobs:
           channel: stable
           flutter-version: '3.24.x'
       - run: flutter config --enable-swift-package-manager
-      - run: flutter pub get
+      # Build from the example directly; `flutter build` runs its own pub get and
+      # performs the SPM migration. Running pub get at the plugin root first
+      # fails because the (non-migrated) example can't resolve an SPM-only plugin.
       - run: flutter build ios --debug --no-codesign
         working-directory: flutter_tapresearch-1.4.0/example
