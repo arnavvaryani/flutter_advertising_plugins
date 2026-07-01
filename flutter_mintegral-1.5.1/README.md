@@ -32,6 +32,19 @@ await Mintegral.instance.initialize(
 
 See `example/` for rewarded, interstitial, banner, and splash usage.
 
+## Bundled SDK versions
+
+| Platform | Dependency | Version |
+|---|---|---|
+| Android | `com.mbridge.msdk.oversea:reward` / `mbbid` / `mbsplash` / `mbbanner` / `newinterstitial` | `16.9.91` |
+| Android | `androidx.appcompat:appcompat` | `1.6.1` |
+| Android | `androidx.recyclerview:recyclerview` | `1.3.2` |
+| Android | Android Gradle Plugin | `8.1.0` |
+| iOS | `MintegralAdSDK` (Swift Package) | `8.1.5` |
+
+> Android and iOS Mintegral SDKs are versioned independently (16.x vs 8.x).
+> Requirements: Android `minSdk 23` / `compileSdk 35`, iOS `12.0+`, Flutter `3.24+`.
+
 ### iOS setup
 
 Requires iOS 12.0+. The plugin integrates via **Swift Package Manager** (the
