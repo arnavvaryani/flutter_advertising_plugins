@@ -67,9 +67,11 @@ jobs:
         with:
           channel: stable
           flutter-version: '3.24.x'
-      - run: flutter config --enable-swift-package-manager
-      # Build from the example directly; `flutter build` runs its own pub get and
-      # performs the SPM migration. Running pub get at the plugin root first
-      # fails because the (non-migrated) example can't resolve an SPM-only plugin.
-      - run: flutter build ios --debug --no-codesign
+      # Enable SPM and build in one step so the config reliably applies.
+      # `flutter build` runs its own pub get and performs the SPM migration.
+      - name: Enable SPM and build iOS
         working-directory: flutter_tapresearch-1.4.0/example
+        run: |
+          flutter config --enable-swift-package-manager
+          flutter config
+          flutter build ios --debug --no-codesign
