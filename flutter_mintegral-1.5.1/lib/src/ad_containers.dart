@@ -95,10 +95,9 @@ abstract class Ad {
 abstract class AdWithView extends Ad {
   /// Default constructor, used by subclasses.
   AdWithView({
-    required String placementId,
-    required String unitId,
-    required this.listener})
-      : super(placementId: placementId, unitId: unitId);
+    required super.placementId,
+    required super.unitId,
+    required this.listener});
 
   /// The [AdWithViewListener] for the ad.
   final AdWithViewListener listener;
@@ -112,8 +111,7 @@ abstract class AdWithView extends Ad {
 /// An [Ad] that is overlaid on top of the UI.
 abstract class AdWithoutView extends Ad {
   /// Default constructor used by subclasses.
-  AdWithoutView({required String placementId, required String unitId})
-      : super(placementId: placementId, unitId: unitId);
+  AdWithoutView({required super.placementId, required super.unitId});
 }
 
 /// Displays an [Ad] as a Flutter widget.
@@ -128,7 +126,7 @@ class AdWidget extends StatefulWidget {
   /// Default constructor for [AdWidget].
   ///
   /// [ad] must be loaded before this is added to the widget tree.
-  const AdWidget({Key? key, required this.ad}) : super(key: key);
+  const AdWidget({super.key, required this.ad});
 
   /// Ad to be displayed as a widget.
   final AdWithView ad;
@@ -220,10 +218,10 @@ class BannerAd extends AdWithView {
   /// A valid [placementId], [unitId], nonnull [listener], and nonnull size is required.
   BannerAd({
     required this.size,
-    required String placementId,
-    required String unitId,
+    required super.placementId,
+    required super.unitId,
     required this.listener,
-  }) : super(placementId: placementId, unitId: unitId, listener: listener);
+  }) : super(listener: listener);
 
   /// Represents the size of a banner ad.
   final AdSize size;
@@ -252,10 +250,10 @@ class BannerAd extends AdWithView {
 class SplashAd extends AdWithoutView {
 
   SplashAd._({
-    required String placementId,
-    required String unitId,
+    required super.placementId,
+    required super.unitId,
     required this.adLoadCallback,
-  })  : super(placementId: placementId, unitId: unitId);
+  });
 
   /// Listener for ad load events.
   final SplashAdLoadCallback adLoadCallback;
@@ -293,10 +291,10 @@ class InterstitialAd extends AdWithoutView {
   /// A valid [placementId] and [unitId] from the Mintegral dashboard,
   /// and a nonnull [adLoadCallback] is required.
   InterstitialAd._({
-    required String placementId,
-    required String unitId,
+    required super.placementId,
+    required super.unitId,
     required this.adLoadCallback,
-  }) : super(placementId: placementId, unitId: unitId);
+  });
 
   /// Callback to be invoked when the ad finishes loading.
   final InterstitialAdLoadCallback adLoadCallback;
@@ -335,11 +333,11 @@ class InterstitialAd extends AdWithoutView {
 class RewardVideoAd extends AdWithoutView {
 
   RewardVideoAd._({
-    required String placementId,
-    required String unitId,
+    required super.placementId,
+    required super.unitId,
     required this.rewardedAdLoadCallback,
     this.isRewardPlus,
-  })  : super(placementId: placementId, unitId: unitId);
+  });
 
   /// Callbacks for events that occur when attempting to load an ad.
   final RewardedAdLoadCallback rewardedAdLoadCallback;

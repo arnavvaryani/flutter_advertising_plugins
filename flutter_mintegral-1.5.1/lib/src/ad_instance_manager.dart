@@ -45,7 +45,9 @@ class AdInstanceManager {
   }
 
   void _onAdEventIOS(Ad ad, String eventName, Map<dynamic, dynamic> arguments) {
-
+    // The iOS bridge emits the same event names as Android, so share the
+    // dispatch logic.
+    _onAdEventAndroid(ad, eventName, arguments);
   }
 
   void _onAdEventAndroid(

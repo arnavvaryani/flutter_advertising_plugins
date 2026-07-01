@@ -1,11 +1,12 @@
 name: flutter_mintegral
-description: Mintegral SDK for Android
-version: 1.5.1
-homepage: https://github.com/AnavrinApps/flutter_plugins
+description: Mintegral (Mobvista) ad SDK for Android & iOS — rewarded, interstitial, banner & splash.
+version: 2.0.0
+homepage: https://github.com/arnavvaryani/flutter_advertising_plugins
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
-  flutter: ">=2.5.0"
+  sdk: '>=3.0.0 <4.0.0'
+  # iOS integrates via Swift Package Manager, which requires Flutter 3.24+.
+  flutter: '>=3.24.0'
 
 dependencies:
   flutter:
@@ -14,7 +15,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.0
 
 flutter:
   plugin:
