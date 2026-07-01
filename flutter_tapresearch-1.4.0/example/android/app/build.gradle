@@ -25,6 +25,7 @@ apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace 'com.anavrinapps.flutter_tapresearch_example'
     compileSdkVersion 34
 
     lintOptions {
