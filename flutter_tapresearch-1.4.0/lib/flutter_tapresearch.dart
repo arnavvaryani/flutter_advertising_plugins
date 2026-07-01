@@ -1,191 +1,196 @@
 import 'dart:async';
-import 'dart:io';
+
 import 'package:flutter/services.dart';
 
-typedef void SurveyWallOpenedListener();
-typedef void SurveyWallDismissedListener();
-typedef void DidReceiveRewardListener(int? reward);
-typedef void IsSurveyWallAvailableListener(int? surveyAvailable);
+/// A reward (transaction) granted to the user, mirroring `TRReward` on both
+/// native SDKs. Rewards are delivered as a batched list via [onRewards].
+class TRReward {
+  TRReward({
+    required this.transactionIdentifier,
+    required this.placementIdentifier,
+    required this.placementTag,
+    required this.currencyName,
+    required this.rewardAmount,
+    required this.payoutEventType,
+  });
 
+  /// Unique transaction id. Use this to de-duplicate rewards on your side.
+  final String transactionIdentifier;
+  final String placementIdentifier;
+  final String placementTag;
+  final String currencyName;
+  final int rewardAmount;
+  final String payoutEventType;
+
+  factory TRReward.fromMap(Map<dynamic, dynamic> map) => TRReward(
+        transactionIdentifier: map['transactionIdentifier']?.toString() ?? '',
+        placementIdentifier: map['placementIdentifier']?.toString() ?? '',
+        placementTag: map['placementTag']?.toString() ?? '',
+        currencyName: map['currencyName']?.toString() ?? '',
+        rewardAmount: (map['rewardAmount'] as num?)?.toInt() ?? 0,
+        payoutEventType: map['payoutEventType']?.toString() ?? '',
+      );
+
+  @override
+  String toString() =>
+      'TRReward(transactionIdentifier: $transactionIdentifier, '
+      'placementTag: $placementTag, currencyName: $currencyName, '
+      'rewardAmount: $rewardAmount)';
+}
+
+/// An error surfaced by the native TapResearch SDK.
+class TapResearchError {
+  TapResearchError(this.code, this.message);
+  final String code;
+  final String message;
+
+  @override
+  String toString() => 'TapResearchError($code, $message)';
+}
+
+typedef RewardsListener = void Function(List<TRReward> rewards);
+typedef SdkReadyListener = void Function();
+typedef ErrorListener = void Function(TapResearchError error);
+typedef ContentShownListener = void Function(String placementTag);
+typedef ContentDismissedListener = void Function(String placementTag);
+
+/// Flutter wrapper for the TapResearch SDK 3.x.
+///
+/// Usage:
+/// ```dart
+/// final tr = TapResearch.instance;
+/// tr.setRewardsListener((rewards) { /* credit the user */ });
+/// await tr.initialize(apiToken: '...', userIdentifier: 'user-123');
+/// if (await tr.canShowContentForPlacement('my_placement')) {
+///   await tr.showContentForPlacement('my_placement');
+/// }
+/// ```
 class TapResearch {
+  TapResearch._(this._channel) {
+    _channel.setMethodCallHandler(_handlePlatformCall);
+  }
+
+  static final TapResearch _instance =
+      TapResearch._(const MethodChannel('flutter_tapresearch'));
+
   static TapResearch get instance => _instance;
 
   final MethodChannel _channel;
 
-  static final TapResearch _instance = TapResearch.private(
-    const MethodChannel('flutter_tapresearch'),
-  );
+  RewardsListener? _rewardsListener;
+  SdkReadyListener? _sdkReadyListener;
+  ErrorListener? _errorListener;
+  ContentShownListener? _contentShownListener;
+  ContentDismissedListener? _contentDismissedListener;
 
-  TapResearch.private(MethodChannel channel) : _channel = channel {
-    _channel.setMethodCallHandler(_platformCallHandler);
-  }
+  /// Called whenever the SDK delivers one or more rewards.
+  void setRewardsListener(RewardsListener listener) =>
+      _rewardsListener = listener;
 
-  static late SurveyWallOpenedListener _surveyWallOpenedListener;
-  static late SurveyWallDismissedListener _surveyWallDismissedListener;
-  static late DidReceiveRewardListener _didReceiveRewardListener;
-  static late IsSurveyWallAvailableListener _isSurveyWallAvailableListener;
+  /// Called once the SDK has finished initializing and is ready to show content.
+  void setSdkReadyListener(SdkReadyListener listener) =>
+      _sdkReadyListener = listener;
 
-  Future<void> configure({String? apiToken}) async {
-    assert(apiToken != null && apiToken.isNotEmpty);
-    return _channel.invokeMethod("configure", <String, dynamic>{
-      'api_token': apiToken,
+  /// Called when the native SDK reports an error.
+  void setErrorListener(ErrorListener listener) => _errorListener = listener;
+
+  /// Called when a content view (survey wall, offer, etc.) is presented.
+  void setContentShownListener(ContentShownListener listener) =>
+      _contentShownListener = listener;
+
+  /// Called when a content view is dismissed.
+  void setContentDismissedListener(ContentDismissedListener listener) =>
+      _contentDismissedListener = listener;
+
+  /// Initializes the SDK. Both [apiToken] and [userIdentifier] are required by
+  /// the 3.x SDK. Register your listeners (e.g. [setRewardsListener]) before
+  /// calling this so you don't miss early callbacks.
+  Future<void> initialize({
+    required String apiToken,
+    required String userIdentifier,
+  }) async {
+    assert(apiToken.isNotEmpty, 'apiToken must not be empty');
+    assert(userIdentifier.isNotEmpty, 'userIdentifier must not be empty');
+    await _channel.invokeMethod<void>('initialize', <String, dynamic>{
+      'apiToken': apiToken,
+      'userIdentifier': userIdentifier,
     });
   }
 
-  Future<void> initPlacement({String? placementId}) async {
-    return _channel.invokeMethod("initPlacement", <String, dynamic>{
-      'placement_id': placementId,
-    });
+  /// Whether the SDK has finished initializing.
+  Future<bool> isReady() async {
+    final ready = await _channel.invokeMethod<bool>('isReady');
+    return ready ?? false;
   }
 
-  Future<void> showSurveyWall() async {
-    try {
-      await _channel.invokeMethod('showSurveyWall');
-    } catch (e) {
-      print(e.toString());
-    }
+  /// Whether content is currently available for [placementTag].
+  Future<bool> canShowContentForPlacement(String placementTag) async {
+    final canShow = await _channel.invokeMethod<bool>(
+      'canShowContentForPlacement',
+      <String, dynamic>{'placementTag': placementTag},
+    );
+    return canShow ?? false;
   }
 
-  Future<void> setUniqueUserIdentifier(String uid) async {
-    try {
-      await _channel.invokeMethod('setUniqueUserIdentifier', <String, dynamic>{
-        'user_id': uid,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
+  /// Presents content (survey wall, offers, etc.) for [placementTag].
+  /// Optional [customParameters] are forwarded to the native SDK.
+  Future<void> showContentForPlacement(
+    String placementTag, {
+    Map<String, dynamic>? customParameters,
+  }) async {
+    await _channel.invokeMethod<void>(
+      'showContentForPlacement',
+      <String, dynamic>{
+        'placementTag': placementTag,
+        'customParameters': customParameters ?? <String, dynamic>{},
+      },
+    );
   }
 
-  Future<void> setRewardListener() async {
-    if (Platform.isAndroid) {
-      try {
-        await _channel.invokeMethod('setRewardListener');
-      } catch (e) {
-        print(e.toString());
-      }
-    }
+  /// Updates the unique user identifier after initialization.
+  Future<void> setUserIdentifier(String userIdentifier) async {
+    await _channel.invokeMethod<void>(
+      'setUserIdentifier',
+      <String, dynamic>{'userIdentifier': userIdentifier},
+    );
   }
 
-  Future<void> setNavigationBarText(String navBarText) async {
-    try {
-      await _channel.invokeMethod('setNavigationBarText', <String, dynamic>{
-        'navBarText': navBarText,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
+  /// Sends custom user attributes to TapResearch for targeting.
+  Future<void> sendUserAttributes(Map<String, dynamic> attributes) async {
+    await _channel.invokeMethod<void>(
+      'sendUserAttributes',
+      <String, dynamic>{'attributes': attributes},
+    );
   }
 
-  Future<void> setDebugMode(bool mode) async {
-    if (Platform.isAndroid) {
-      try {
-        await _channel.invokeMethod('setDebugMode', <String, dynamic>{
-          'mode': mode,
-        });
-      } catch (e) {
-        print(e.toString());
-      }
-    }
-  }
-
-  Future<void> setNavigationBarColor(
-      {String? hexColor,
-      double? red,
-      double? green,
-      double? blue,
-      double? alpha}) async {
-    if (Platform.isAndroid) {
-      try {
-        await _channel.invokeMethod('setNavigationBarColor', <String, dynamic>{
-          'navColor': hexColor,
-        });
-      } catch (e) {
-        print(e.toString());
-      }
-    } else if (Platform.isIOS) {
-      try {
-        await _channel.invokeMethod('setNavigationBarColor', <String, dynamic>{
-          'red': red,
-          'green': green,
-          'blue': blue,
-          'alpha': alpha
-        });
-      } catch (e) {
-        print(e.toString());
-      }
-    }
-  }
-
-  Future<void> setNavigationBarTextColor(
-      {String? hexColor,
-      double? red,
-      double? green,
-      double? blue,
-      double? alpha}) async {
-    if (Platform.isAndroid) {
-      try {
-        await _channel
-            .invokeMethod('setNavigationBarTextColor', <String, dynamic>{
-          'navBarColor': hexColor,
-        });
-      } catch (e) {
-        print(e.toString());
-      }
-    } else if (Platform.isIOS) {
-      try {
-        await _channel.invokeMethod(
-            'setNavigationBarTextColor', <String, dynamic>{
-          'red': red,
-          'green': green,
-          'blue': blue,
-          'alpha': alpha
-        });
-      } catch (e) {
-        print(e.toString());
-      }
-    }
-  }
-
-  Future _platformCallHandler(MethodCall call) async {
-    print(
-        "TapResearch _platformCallHandler call ${call.method} ${call.arguments}");
-
+  Future<dynamic> _handlePlatformCall(MethodCall call) async {
     switch (call.method) {
-      case "tapResearchSurveyWallOpened":
-        _surveyWallOpenedListener();
+      case 'onRewards':
+        final raw = (call.arguments as List<dynamic>?) ?? const [];
+        final rewards = raw
+            .map((e) => TRReward.fromMap(e as Map<dynamic, dynamic>))
+            .toList();
+        _rewardsListener?.call(rewards);
         break;
-
-      case "tapResearchSurveyWallDismissed":
-        _surveyWallDismissedListener();
+      case 'onSdkReady':
+        _sdkReadyListener?.call();
         break;
-
-      case "tapResearchDidReceiveReward":
-        _didReceiveRewardListener(call.arguments);
+      case 'onError':
+        final args = (call.arguments as Map<dynamic, dynamic>?) ?? const {};
+        _errorListener?.call(TapResearchError(
+          args['code']?.toString() ?? 'unknown',
+          args['message']?.toString() ?? '',
+        ));
         break;
-
-      case "isSurveyWallAvailable":
-        if (Platform.isAndroid) {
-          _isSurveyWallAvailableListener(call.arguments);
-        }
+      case 'onContentShown':
+        _contentShownListener?.call(call.arguments?.toString() ?? '');
+        break;
+      case 'onContentDismissed':
+        _contentDismissedListener?.call(call.arguments?.toString() ?? '');
         break;
       default:
-        print('Unknown method ${call.method} ');
+        // Unknown callback — ignore so older/newer native layers stay compatible.
+        break;
     }
   }
-
-  void setSurveyWallOpenedListener(
-          SurveyWallOpenedListener surveyWallOpenedListener) =>
-      _surveyWallOpenedListener = surveyWallOpenedListener;
-
-  void setSurveyWallDismissedListener(
-          SurveyWallDismissedListener surveyWallDismissedListener) =>
-      _surveyWallDismissedListener = surveyWallDismissedListener;
-
-  void setDidReceiveRewardListener(
-          DidReceiveRewardListener didReceiveRewardListener) =>
-      _didReceiveRewardListener = didReceiveRewardListener;
-
-  void setIsSurveyWallAvailableListener(
-          IsSurveyWallAvailableListener isSurveyWallAvailableListener) =>
-      _isSurveyWallAvailableListener = isSurveyWallAvailableListener;
 }

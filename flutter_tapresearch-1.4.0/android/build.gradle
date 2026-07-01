@@ -1,40 +1,61 @@
 group 'com.anavrinapps.flutter_tapresearch'
-version '1.0'
-
+version '2.0.0'
 
 buildscript {
+    ext.kotlin_version = '1.8.22'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        // TapResearch SDK is hosted on a custom Artifactory, not Maven Central.
         maven { url "https://artifactory.tools.tapresearch.io/artifactory/tapresearch-android-sdk/" }
     }
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    namespace 'com.anavrinapps.flutter_tapresearch'
+    compileSdkVersion 35
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
     defaultConfig {
-        minSdkVersion 16
+        // TapResearch SDK 3.x requires minSdk 23.
+        minSdkVersion 23
     }
+
     lintOptions {
         disable 'InvalidPackage'
     }
 }
 
 dependencies {
-    implementation 'com.tapr:tapresearch:2.4.1'
-    implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
-    }
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // TapResearch SDK 3.x. compileSdk 35 requires tapsdk 3.5.2+.
+    implementation 'com.tapresearch:tapsdk:3.7.2'
+    implementation 'androidx.lifecycle:lifecycle-process:2.6.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.1.0'
+    implementation 'com.google.android.gms:play-services-appset:16.1.0'
+}
