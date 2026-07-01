@@ -61,9 +61,7 @@ class FlutterTapresearchPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
             "showContentForPlacement" -> showContent(call, result)
             "setUserIdentifier" -> {
                 val userId = call.argument<String>("userIdentifier") ?: ""
-                TapResearch.setUserIdentifier(userId) { error ->
-                    invokeOnMain("onError", errorMap(error))
-                }
+                TapResearch.setUserIdentifier(userId)
                 result.success(null)
             }
             "sendUserAttributes" -> {
@@ -117,10 +115,12 @@ class FlutterTapresearchPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
                 invokeOnMain("onContentDismissed", placementTag)
             }
         }
+        // Real SDK signature: showContentForPlacement(tag, contentListener,
+        // customParameters, errorListener).
         TapResearch.showContentForPlacement(
             tag,
-            if (custom != null) HashMap(custom) else null,
-            contentCallback
+            contentCallback,
+            if (custom != null) HashMap(custom) else null
         ) { error -> invokeOnMain("onError", errorMap(error)) }
         result.success(null)
     }
@@ -136,7 +136,7 @@ class FlutterTapresearchPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
     private fun errorMap(error: TRError?): Map<String, Any?> = mapOf(
         "code" to (error?.code?.toString() ?: "unknown"),
-        "message" to (error?.message ?: "")
+        "message" to (error?.toString() ?: "")
     )
 
     /** MethodChannel callbacks must be delivered on the main thread. */
